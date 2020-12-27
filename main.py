@@ -14,7 +14,7 @@ ls_cmd.add_argument('archive', help='the archive to list from')
 
 unpack_cmd = commands_arg.add_parser('unpack')
 unpack_cmd.add_argument('archive', help='the archive to unpack')
-unpack_cmd.add_argument('-o', metavar='DIR', dest='output_folder', help='output folder', default='./')
+unpack_cmd.add_argument('-o', metavar='DIR', dest='output_folder', help='output folder')
 unpack_cmd.add_argument('--files', type=str,
                         nargs='+', help='the files to extract from the archive')
 

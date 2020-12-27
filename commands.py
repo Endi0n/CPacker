@@ -1,6 +1,8 @@
 import utils
 import struct
 import io
+import os
+import pathlib
 
 
 def archive_create(archive, files):
@@ -43,36 +45,54 @@ def archive_create(archive, files):
 def archive_list(archive):
     f = open(archive, 'rb')
 
-    signature = f.read(6)
-    if signature != b'\x99CPack':
-        raise ValueError('File is not an CPack archive')
-
-    version = struct.unpack('>H', f.read(2))[0]
-    if version != 0:
-        raise ValueError('Unsupported CPack archive version')
+    utils.check_cpacker_file(f)
 
     footer_start = struct.unpack('L', f.read(8))[0]
     f.seek(footer_start, io.SEEK_SET)
 
-    print('Archive contents:\n')
-    print('{:15}{}'.format('Size:', 'File Name:'))
-    print('{:15}{}'.format('-----', '----------'))
+    file_list = utils.get_cpacker_file_list(f)
 
-    while True:
-        data = f.read(2)
+    if file_list:
+        print('Archive contents:\n')
+        print('{:15}{}'.format('Size:', 'File Name:'))
+        print('{:15}{}'.format('-----', '----------'))
+    else:
+        print('The archive is empty.')
+        return
 
-        if not data:
-            break
-
-        file_name_size = struct.unpack('H', data)[0]
-        file_name = f.read(file_name_size).decode()
-
-        file_start = struct.unpack('L', f.read(8))[0]
-        file_size = struct.unpack('L', f.read(8))[0]
-
+    for file_name, _, file_size in file_list:
         print(f'{utils.fmt_binary_size(file_size):15}{file_name}')
 
 
-def archive_unpack(archive, output_folder, files=None):
-    print(archive, output_folder, files)
+def archive_unpack(archive, output_folder=None, files=None):
+    if not output_folder:
+        output_folder = os.getcwd()
 
+    f = open(archive, 'rb')
+    utils.check_cpacker_file(f)
+
+    footer_start = struct.unpack('L', f.read(8))[0]
+    f.seek(footer_start, io.SEEK_SET)
+
+    file_list = [file for file in utils.get_cpacker_file_list(f) if file[0] in files]
+
+    if file_list:
+        print(f'Unpacked to {os.path.relpath(output_folder)}{os.path.sep}:\n')
+        print('{:15}{}'.format('Size:', 'File Name:'))
+        print('{:15}{}'.format('-----', '----------'))
+    else:
+        print('Nothing to unpack.')
+        return
+
+    for file_name, file_start, file_size in file_list:
+        file_path = os.path.join(output_folder, file_name)
+        pathlib.Path(os.path.dirname(file_path)).mkdir(parents=True, exist_ok=True)
+
+        tmp_file = open(file_path, 'wb')
+
+        f.seek(file_start)
+        tmp_file.write(f.read(file_size))
+
+        tmp_file.close()
+
+        print(f'{utils.fmt_binary_size(file_size):15}{file_name}')
