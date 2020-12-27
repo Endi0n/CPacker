@@ -54,6 +54,10 @@ def archive_list(archive):
     footer_start = struct.unpack('L', f.read(8))[0]
     f.seek(footer_start, io.SEEK_SET)
 
+    print('Archive contents:\n')
+    print('{:15}{}'.format('Size:', 'File Name:'))
+    print('{:15}{}'.format('-----', '----------'))
+
     while True:
         data = f.read(2)
 
@@ -62,8 +66,11 @@ def archive_list(archive):
 
         file_name_size = struct.unpack('H', data)[0]
         file_name = f.read(file_name_size).decode()
-        f.read(16)
-        print(file_name)
+
+        file_start = struct.unpack('L', f.read(8))[0]
+        file_size = struct.unpack('L', f.read(8))[0]
+
+        print(f'{utils.fmt_binary_size(file_size):15}{file_name}')
 
 
 def archive_unpack(archive, output_folder, files=None):
