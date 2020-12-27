@@ -1,5 +1,6 @@
 import os
 import errno
+import math
 
 
 def get_expanded_file_list(*files):
@@ -24,3 +25,15 @@ def get_expanded_file_list(*files):
     return file_lst
 
 
+def fmt_binary_size(size):
+    units = ['bytes', 'KiB', 'MiB', 'GiB', 'TiB']
+
+    unit = 0
+    for unit in range(0, len(units)):
+        if size < 1024:
+            break
+        size /= 1024.0
+
+    size = int(math.ceil(size))
+
+    return f'{size} {units[unit]}'
