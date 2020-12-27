@@ -15,7 +15,9 @@ def get_expanded_file_list(*files):
         elif os.path.isdir(file):
             for path, subdirs, cfiles in os.walk(file):
                 for name in cfiles:
-                    file_path = os.path.join(path, name)[len(file):]  # Relative file path cropped
+                    # Relative file path cropped
+                    file_path = os.path.realpath(os.path.join(path, name))[len(os.getcwd()):]
+
                     file_lst.append(file_path)
         else:
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file)
