@@ -2,7 +2,7 @@ import os
 import errno
 
 
-def get_expanded_files(*files):
+def get_expanded_file_list(*files):
     file_lst = []
 
     for file in files:
