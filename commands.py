@@ -14,6 +14,10 @@ def archive_create(archive, files):
 
     files_meta = []
 
+    print('Archive contents:\n')
+    print('{:15}{}'.format('Size:', 'File Name:'))
+    print('{:15}{}'.format('-----', '----------'))
+
     for file_name, file_path in utils.get_expanded_file_list(*files):
         tmp_file = open(file_path, 'rb')
 
@@ -25,7 +29,11 @@ def archive_create(archive, files):
 
         tmp_file.close()
 
-        files_meta.append((file_name, file_start, file_end - file_start))
+        file_size = file_end - file_start
+
+        files_meta.append((file_name, file_start, file_size))
+
+        print(f'{utils.fmt_binary_size(file_size):15}{file_name}')
 
     footer_start = g.tell()
 
