@@ -74,7 +74,10 @@ def archive_unpack(archive, output_folder=None, files=None):
     footer_start = struct.unpack('L', f.read(8))[0]
     f.seek(footer_start, io.SEEK_SET)
 
-    file_list = [file for file in utils.get_cpacker_file_list(f) if file[0] in files]
+    file_list = utils.get_cpacker_file_list(f)
+
+    if files:
+        file_list = [file for file in file_list if file[0] in files]
 
     if file_list:
         print(f'Unpacked to {os.path.relpath(output_folder)}{os.path.sep}:\n')
