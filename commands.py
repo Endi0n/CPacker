@@ -47,6 +47,9 @@ def archive_create(archive, files):
     g.seek(8, io.SEEK_SET)
     g.write(struct.pack('L', footer_start))
 
+    g.seek(0, io.SEEK_END)
+    print(f'\nTotal archive size: {utils.fmt_binary_size(g.tell())}')
+
     g.close()
 
 
