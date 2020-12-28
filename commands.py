@@ -6,6 +6,15 @@ import pathlib
 
 
 def archive_create(archive, files):
+    """
+    Create an archive with a given name and files.
+
+    :param archive: archive file path to be created
+    :type archive: str
+    :param files: files paths to add to the archive
+    :type files: list[str]
+    """
+
     g = open(archive, 'wb')
 
     g.write(b'\x99CPack')  # File signature
@@ -54,6 +63,13 @@ def archive_create(archive, files):
 
 
 def archive_list(archive):
+    """
+    Print the content of an archive.
+
+    :param archive: archive file path
+    :type archive: str
+    """
+
     f = open(archive, 'rb')
 
     utils.check_cpacker_file(f)
@@ -76,6 +92,17 @@ def archive_list(archive):
 
 
 def archive_unpack(archive, output_folder=None, files=None):
+    """
+    Unpack from a given archive.
+
+    :param archive: archive file path
+    :type archive: str
+    :param output_folder: output folder path. if None specified, files are extracted to the cwd
+    :type output_folder: str or None
+    :param files: files to extract from the archive. if None specified, all files from the archive are extracted
+    :type files: list[str] or None
+    """
+
     if not output_folder:
         output_folder = os.getcwd()
 

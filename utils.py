@@ -5,6 +5,14 @@ import struct
 
 
 def check_cpacker_file(file):
+    """
+    Checks if a file is a CPacker archive
+
+    :param file: file path to check
+    :type file: str
+    :rtype: bool
+    """
+
     signature = file.read(6)
     if signature != b'\x99CPack':
         raise ValueError('File is not an CPack archive')
@@ -15,6 +23,16 @@ def check_cpacker_file(file):
 
 
 def get_cpacker_file_list(file):
+    """
+    Read the CPack footer
+
+    :param file: file to read from
+    :type file: io.BufferedReader
+    :return: a list of (str, int, int) tuples representing: the file, the file start position within the archive,
+        and the file size
+    :rtype: list[tuple[str, int, int]]
+    """
+
     files = []
 
     while True:
@@ -35,6 +53,14 @@ def get_cpacker_file_list(file):
 
 
 def get_expanded_file_list(*files):
+    """
+    Recursively scans every folder and generates a list containing every selected file
+
+    :param files: files or directories
+    :type files: str
+    :return: a list containing every file's relative file's name to archive base and its full path
+    :rtype: list[tuple[str, str]]
+    """
     file_lst = []
 
     for file in files:
@@ -60,6 +86,14 @@ def get_expanded_file_list(*files):
 
 
 def fmt_binary_size(size):
+    """
+    Converts size to a human readable binary size
+
+    :param size: byte size to be converted
+    :type size: int
+    :return: human readable binary size
+    :rtype: str
+    """
     units = ['bytes', 'KiB', 'MiB', 'GiB', 'TiB']
 
     unit = 0
