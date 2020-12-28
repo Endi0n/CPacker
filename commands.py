@@ -98,15 +98,20 @@ def archive_unpack(archive, output_folder=None, files=None):
         print('Nothing to unpack.')
         return
 
+    total_size = 0
+
     for file_name, file_start, file_size in file_list:
         file_path = os.path.join(output_folder, file_name)
         pathlib.Path(os.path.dirname(file_path)).mkdir(parents=True, exist_ok=True)
 
-        tmp_file = open(file_path, 'wb')
-
         f.seek(file_start)
-        tmp_file.write(f.read(file_size))
 
+        tmp_file = open(file_path, 'wb')
+        tmp_file.write(f.read(file_size))
         tmp_file.close()
 
+        total_size += file_size
+
         print(f'{utils.fmt_binary_size(file_size):15}{file_name}')
+
+    print(f'\nUnpacked {utils.fmt_binary_size(total_size)}')
