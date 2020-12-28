@@ -48,7 +48,7 @@ def archive_create(archive, files):
     g.write(struct.pack('L', footer_start))
 
     g.seek(0, io.SEEK_END)
-    print(f'\nTotal archive size: {utils.fmt_binary_size(g.tell())}')
+    print(f'\nTotal archive size: {utils.fmt_binary_size(g.tell())}.')
 
     g.close()
 
@@ -72,7 +72,7 @@ def archive_list(archive):
         return
 
     for file_name, _, file_size in file_list:
-        print(f'{utils.fmt_binary_size(file_size):15}{file_name}')
+        print(f'{utils.fmt_binary_size(file_size):15}{file_name}.')
 
 
 def archive_unpack(archive, output_folder=None, files=None):
@@ -91,7 +91,7 @@ def archive_unpack(archive, output_folder=None, files=None):
         file_list = [file for file in file_list if file[0] in files]
 
     if file_list:
-        print(f'Unpacked to {os.path.relpath(output_folder)}{os.path.sep}:\n')
+        print(f'Unpacking to {os.path.relpath(output_folder)}{os.path.sep}:\n')
         print('{:15}{}'.format('Size:', 'File Name:'))
         print('{:15}{}'.format('-----', '----------'))
     else:
@@ -114,4 +114,4 @@ def archive_unpack(archive, output_folder=None, files=None):
 
         print(f'{utils.fmt_binary_size(file_size):15}{file_name}')
 
-    print(f'\nUnpacked {utils.fmt_binary_size(total_size)}')
+    print(f'\nUnpacked {utils.fmt_binary_size(total_size)}.')
