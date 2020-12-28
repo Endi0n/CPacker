@@ -4,7 +4,7 @@ import commands
 parser = argparse.ArgumentParser()
 
 commands_arg = parser.add_subparsers(title='commands', dest='command', required=True)
-create_cmd = commands_arg.add_parser('create')
+create_cmd = commands_arg.add_parser('pack')
 create_cmd.add_argument('archive', help='the name of the archive to create')
 create_cmd.add_argument('files', type=str,
                         nargs='+', help='the files to pack into the archive')
@@ -26,7 +26,7 @@ del args_args['command']  # Remove additional parameter
 
 # Dispatch table
 COMMAND_HANDLER_MAP = {
-    'create': commands.archive_create,
+    'pack': commands.archive_create,
     'list': commands.archive_list,
     'unpack': commands.archive_unpack,
 }
