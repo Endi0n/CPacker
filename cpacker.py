@@ -34,4 +34,7 @@ COMMAND_HANDLER_MAP = {
 }
 
 # Invocation
-COMMAND_HANDLER_MAP[args_command](**args_args)
+try:
+    COMMAND_HANDLER_MAP[args_command](**args_args)
+except Exception as e:
+    print(e)
