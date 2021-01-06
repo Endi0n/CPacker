@@ -88,7 +88,7 @@ def archive_list(archive):
         return
 
     for file_name, _, file_size in file_list:
-        print(f'{utils.fmt_binary_size(file_size):15}{file_name}.')
+        print(f'{utils.fmt_binary_size(file_size):15}{file_name}')
 
 
 def archive_unpack(archive, output_folder=None, files=None):
